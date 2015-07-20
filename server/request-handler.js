@@ -1,5 +1,4 @@
-
-
+var url = require('url');
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -15,6 +14,7 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 var requestHandler = function(request, response) {
+  console.log("we b checkin",request, response)
   // Request and Response come from node's http module.
   //
   // They include information about both the incoming request, such as
@@ -37,6 +37,9 @@ var requestHandler = function(request, response) {
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
+
+  
+
   // Tell the client we are sending them plain text.
   //
   // You will need to change this if you are sending something
@@ -47,6 +50,11 @@ var requestHandler = function(request, response) {
   // which includes the status and all headers.
   response.writeHead(statusCode, headers);
 
+  var pathname = url.parse(request.url).pathname;
+
+  if(pathname === '/classes/messages'){
+    response.end("YOOOO");
+  }
   // Make sure to always call response.end() - Node may not send
   // anything back to the client until you do. The string you pass to
   // response.end() will be the body of the response - i.e. what shows
@@ -57,7 +65,6 @@ var requestHandler = function(request, response) {
   response.end("VY AND RYAN ARE AWESOME!!!!!!");
 };
 
-exports.handleRequest = requestHandler;
  
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
@@ -76,3 +83,4 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+exports.handleRequest = requestHandler;
