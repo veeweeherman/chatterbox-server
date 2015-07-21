@@ -53,6 +53,7 @@ var message = function (){
 	  url: 'http://127.0.0.1:3000/classes/chatterbox',
 	  type: 'POST',
 	  data: JSON.stringify(message),
+    crossDomain: true,
 	  contentType: 'application/json',
 	  success: function (data) {
 	    console.log('chatterbox: Message sent');
@@ -73,8 +74,9 @@ var app = {
       url: 'http://127.0.0.1:3000/classes/chatterbox',
       type: 'GET',
       contentType: 'application/json',
+      crossDomain: true,
       success: function (data) {
-
+        console.log(data)
         for (var i = data.results.length-1; i>=0; i--) {
           var id = data.results[i].objectId; //stores the users' id in a variable
 
@@ -116,6 +118,7 @@ var app = {
 		  type: 'POST',
 		  data: JSON.stringify(message),
 		  contentType: 'application/json',
+      crossDomain: true,
 		  success: function (data) {
 		    console.log('chatterbox: Message sent');
 		  },
@@ -144,6 +147,7 @@ var app = {
 		  type: 'POST',
 		  data: JSON.stringify(message),
 		  contentType: 'application/json',
+      crossDomain: true,
 		  
 		  success: function () {
 		  	app.init();
