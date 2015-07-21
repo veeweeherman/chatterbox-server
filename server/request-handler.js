@@ -56,12 +56,17 @@ var requestHandler = function(request, response) {
 
   } else if (request.method === "POST"){ // checks for POST
     if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
+
+      var thing = '';
       request.on('data', function (chunk) {
-        console.log(chunk.toString());
+        thing += chunk.toString();
+
+
       });
-      request.on('end', function(){
-        response.writeHead(200, "OK", {'Content-Type': 'text/html'});
-        response.end();
+      request.on('end', function (){
+        messages.results.push(thing);
+        response.writeHead(201, "OK", {'Content-Type': 'text/html'});
+        response.end(JSON.stringify(messages.results));
       })
       statusCode = 201;
     }
@@ -90,7 +95,7 @@ var requestHandler = function(request, response) {
 //   //
 //   // Calling .end "flushes" the response's internal buffer, forcing
 //   // node to actually send all the data over to the client.
-   response.end("VY AND RYAN ARE AWESOME!!!!!!");
+   // response.end("VY AND RYAN ARE AWESOME!!!!!!");
 };
 
  
