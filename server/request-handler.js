@@ -51,7 +51,10 @@ var requestHandler = function(request, response) {
   var headers = defaultCorsHeaders;
 
   console.log(request.method)
-  if(request.method === "GET"){
+  if (url.parse(request.url).pathname !== '/classes/messages' ) {
+    response.writeHead(404, "NOT FOUND", {'Content-Type': 'text/html'});
+    response.end();
+  } else if(request.method === "GET"){
 
     response.end(JSON.stringify(messages)) // stringify messages before sending back to user
 
@@ -70,7 +73,9 @@ var requestHandler = function(request, response) {
       })
       statusCode = 201;
     }
-  }
+  } // else if
+      // if pathname doesn't match / || /classes/messages
+        // Return statuscode 404
   
 
   // Tell the client we are sending them plain text.
