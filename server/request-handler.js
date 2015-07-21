@@ -50,15 +50,17 @@ var requestHandler = function(request, response) {
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
-  console.log(request.method)
-  if (url.parse(request.url).pathname !== '/classes/messages' ) {
-    response.writeHead(404, "NOT FOUND", {'Content-Type': 'text/html'});
+  if (url.parse(request.url).pathname !== '/classes/messages' ) { // check if pathname is garbage
+  
+    response.writeHead(404, "NOT FOUND", {'Content-Type': 'text/html'}); // return 404
     response.end();
+  
   } else if(request.method === "GET"){
 
     response.end(JSON.stringify(messages)) // stringify messages before sending back to user
 
-  } else if (request.method === "POST"){ // checks for POST
+  } else if (request.method === "POST"){
+  
     if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
 
       var data = ''; 
