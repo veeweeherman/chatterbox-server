@@ -30,21 +30,6 @@ var requestHandler = function(request, response) {
   // Documentation for both request and response can be found in the HTTP section at
   // http://nodejs.org/documentation/api/
 
-  if(request.method === "GET"){
-
-
-    console.log("WE BE GE''IN");
-
-    var endResponse = {
-      results: []
-    };
-    response.end(JSON.stringify(endResponse) )
-    //response.end("YOLT")
-
-
-  } else if (request.method === "POST"){
-    console.log("WE BE POS'IN");
-  }
 
 
   // Do some basic logging.
@@ -61,6 +46,20 @@ var requestHandler = function(request, response) {
   var headers = defaultCorsHeaders;
 
 
+  if(request.method === "GET"){
+
+    console.log("WE BE GE''IN");
+
+    var endResponse = {
+      results: []
+    };
+    response.end(JSON.stringify(endResponse) )
+
+  } else if (request.method === "POST"){ // checks for POST
+    if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
+      statusCode = 201;
+    }
+  }
   
 
   // Tell the client we are sending them plain text.
