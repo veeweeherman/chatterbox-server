@@ -19,6 +19,11 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+
+var messages = { // Object to store results
+  results: []
+};
+
 var requestHandler = function(request, response) {
   //console.log(request)
   // Request and Response come from node's http module.
@@ -45,28 +50,23 @@ var requestHandler = function(request, response) {
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
-  var messages = {
-    results: []
-  };
-
-
+  console.log(request.method)
   if(request.method === "GET"){
 
-    response.end(JSON.stringify(messages) )
+    response.end(JSON.stringify(messages)) // stringify messages before sending back to user
 
   } else if (request.method === "POST"){ // checks for POST
     if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
 
-      var thing = '';
-      request.on('data', function (chunk) {
-        thing += chunk.toString();
-
-
+      var data = ''; 
+      request.on('data', function (chunk) { // in case data comes in chunks, we put the pieces together in data
+        data += chunk.toString();
       });
-      request.on('end', function (){
-        messages.results.push(thing);
-        response.writeHead(201, "OK", {'Content-Type': 'text/html'});
-        response.end(JSON.stringify(messages.results));
+
+      request.on('end', function (){ // event fires when data is complete
+        messages.results.push(JSON.parse(data)); // stores message in messages
+        response.writeHead(201, "OK", {'Content-Type': 'text/html'}); // header junk
+        response.end();
       })
       statusCode = 201;
     }
