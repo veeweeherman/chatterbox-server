@@ -45,18 +45,24 @@ var requestHandler = function(request, response) {
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
+  var messages = {
+    results: []
+  };
+
 
   if(request.method === "GET"){
 
-    console.log("WE BE GE''IN");
-
-    var endResponse = {
-      results: []
-    };
-    response.end(JSON.stringify(endResponse) )
+    response.end(JSON.stringify(messages) )
 
   } else if (request.method === "POST"){ // checks for POST
     if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
+      request.on('data', function (chunk) {
+        console.log(chunk.toString());
+      });
+      request.on('end', function(){
+        response.writeHead(200, "OK", {'Content-Type': 'text/html'});
+        response.end();
+      })
       statusCode = 201;
     }
   }
