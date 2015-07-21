@@ -24,6 +24,7 @@ var messages = { // Object to store results
   results: []
 };
 
+var paths = ["/classes/messages", "/classes/room", "/"]
 var requestHandler = function(request, response) {
   //console.log(request)
   // Request and Response come from node's http module.
@@ -50,13 +51,14 @@ var requestHandler = function(request, response) {
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
-  if (url.parse(request.url).pathname !== '/classes/messages' ) { // check if pathname is garbage
+  if (paths.indexOf(url.parse(request.url).pathname) === -1) { // check if pathname is garbage
   
     response.writeHead(404, "NOT FOUND", {'Content-Type': 'text/html'}); // return 404
     response.end();
   
   } else if(request.method === "GET"){
 
+    response.writeHead(200, "OK", {'Content-Type': 'text/html'});
     response.end(JSON.stringify(messages)) // stringify messages before sending back to user
 
   } else if (request.method === "POST"){
@@ -73,11 +75,8 @@ var requestHandler = function(request, response) {
         response.writeHead(201, "OK", {'Content-Type': 'text/html'}); // header junk
         response.end();
       })
-      statusCode = 201;
     }
-  } // else if
-      // if pathname doesn't match / || /classes/messages
-        // Return statuscode 404
+  } 
   
 
   // Tell the client we are sending them plain text.
@@ -117,4 +116,4 @@ var requestHandler = function(request, response) {
 // Another way to get around this restriction is to serve you chat
 // client from this domain by setting up static file serving.
 
-module.exports = requestHandler;
+module.exports.requestHandler = requestHandler;
