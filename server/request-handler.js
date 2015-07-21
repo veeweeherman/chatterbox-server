@@ -24,7 +24,7 @@ var messages = { // Object to store results
   results: []
 };
 
-var paths = ["/classes/messages", "/", "/classes/room1"]
+var paths = ["/classes/messages", "/", "/classes/room1"] //array to hold possible paths
 var requestHandler = function(request, response) {
   // Request and Response come from node's http module.
   //
@@ -63,21 +63,16 @@ var requestHandler = function(request, response) {
 
   } else if (request.method === "POST"){
   
-    console.log(url.parse(request.url).pathname);
-    // if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
-
       var data = ''; 
       request.on('data', function (chunk) { // in case data comes in chunks, we put the pieces together in data
         data += chunk.toString();
       });
       request.on('end', function (){ // event fires when data is complete
-        messages.results.push(JSON.parse(data)); // stores message in messages
+        messages.results.push(JSON.parse(data)); // stores message in messages object
         statusCode = 201;
         response.writeHead(statusCode, headers); // header junk
-
         response.end();
       })
-    // }
   } 
   
 
@@ -91,11 +86,6 @@ var requestHandler = function(request, response) {
   // which includes the status and all headers.
   response.writeHead(statusCode, headers);
 
-//   var pathname = url.parse(request.url).pathname;
-
-//   if(pathname === '/classes/messages'){
-//     response.end("YOOOO");
-//   }
 //   // Make sure to always call response.end() - Node may not send
 //   // anything back to the client until you do. The string you pass to
 //   // response.end() will be the body of the response - i.e. what shows
@@ -103,7 +93,7 @@ var requestHandler = function(request, response) {
 //   //
 //   // Calling .end "flushes" the response's internal buffer, forcing
 //   // node to actually send all the data over to the client.
-   // response.end("VY AND RYAN ARE AWESOME!!!!!!");
+
 };
 
  
