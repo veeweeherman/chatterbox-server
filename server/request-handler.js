@@ -50,6 +50,16 @@ var requestHandler = function(request, response) {
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
 
+  // Tell the client we are sending them plain text.
+  //
+  // You will need to change this if you are sending something
+  // other than plain text, like JSON or HTML.
+  headers['Content-Type'] = "application/json";
+
+  // .writeHead() writes to the request line and headers of the response,
+  // which includes the status and all headers.
+  response.writeHead(statusCode, headers);
+
   if (paths.indexOf(url.parse(request.url).pathname) === -1) { // check if pathname is garbage
     
     statusCode = 404;
@@ -73,18 +83,13 @@ var requestHandler = function(request, response) {
         response.writeHead(statusCode, headers); // header junk
         response.end();
       })
-  } 
+  } else if (request.method === "OPTIONS") {
+    statusCode = 200;
+    response.writeHead(statusCode, headers);
+    // response.end();
+  }
   
 
-  // Tell the client we are sending them plain text.
-  //
-  // You will need to change this if you are sending something
-  // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "application/json";
-
-  // .writeHead() writes to the request line and headers of the response,
-  // which includes the status and all headers.
-  response.writeHead(statusCode, headers);
 
 //   // Make sure to always call response.end() - Node may not send
 //   // anything back to the client until you do. The string you pass to
