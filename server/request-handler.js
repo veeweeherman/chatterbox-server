@@ -24,9 +24,8 @@ var messages = { // Object to store results
   results: []
 };
 
-var paths = ["/classes/messages", "/classes/room", "/"]
+var paths = ["/classes/messages", "/", "/classes/room1"]
 var requestHandler = function(request, response) {
-  //console.log(request)
   // Request and Response come from node's http module.
   //
   // They include information about both the incoming request, such as
@@ -52,30 +51,33 @@ var requestHandler = function(request, response) {
   var headers = defaultCorsHeaders;
 
   if (paths.indexOf(url.parse(request.url).pathname) === -1) { // check if pathname is garbage
-  
-    response.writeHead(404, "NOT FOUND", {'Content-Type': 'text/html'}); // return 404
+    
+    statusCode = 404;
+    response.writeHead(statusCode, "NOT FOUND", {'Content-Type': 'text/html'}); // return 404
     response.end();
   
   } else if(request.method === "GET"){
 
-    response.writeHead(200, "OK", {'Content-Type': 'text/html'});
+    response.writeHead(statusCode, headers);
     response.end(JSON.stringify(messages)) // stringify messages before sending back to user
 
   } else if (request.method === "POST"){
   
-    if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
+    console.log(url.parse(request.url).pathname);
+    // if (url.parse(request.url).pathname === '/classes/messages'){ // returns status code 201 if sent from /classes/messages
 
       var data = ''; 
       request.on('data', function (chunk) { // in case data comes in chunks, we put the pieces together in data
         data += chunk.toString();
       });
-
       request.on('end', function (){ // event fires when data is complete
         messages.results.push(JSON.parse(data)); // stores message in messages
-        response.writeHead(201, "OK", {'Content-Type': 'text/html'}); // header junk
+        statusCode = 201;
+        response.writeHead(statusCode, headers); // header junk
+
         response.end();
       })
-    }
+    // }
   } 
   
 
